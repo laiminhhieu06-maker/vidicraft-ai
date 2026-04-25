@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VidiCraft AI – Nền tảng Video AI cho Creator Việt Nam</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --p:#0A0F1E;--p2:#0D1530;--acc:#00E5FF;--acc2:#FF3D6B;--acc3:#8B5CF6;
+  --g2:linear-gradient(90deg,#00E5FF,#8B5CF6);
+  --g3:linear-gradient(135deg,#FF3D6B,#8B5CF6);
+  --g1:linear-gradient(135deg,#00E5FF12,#8B5CF612);
+  --text:#E8EAF6;--muted:#7B88A8;--card:#111827;--border:#1E2D4A;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--p);color:var(--text);overflow-x:hidden}
+
+/* ─── NAV ─── */
+nav{position:sticky;top:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:66px;background:rgba(10,15,30,0.94);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border)}
+.logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+  background:var(--g2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-decoration:none}
+.nav-links{display:flex;gap:30px;list-style:none}
+.nav-links a{font-size:14px;font-weight:500;color:var(--muted);text-decoration:none;transition:.2s}
+.nav-links a:hover{color:#fff}
+.nav-right{display:flex;gap:10px;align-items:center}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text);padding:8px 20px;
+  border-radius:8px;font-size:13.5px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:.2s}
+.btn-ghost:hover{border-color:var(--acc);color:var(--acc)}
+.btn-nav-cta{background:var(--g2);border:none;color:#000;padding:9px 22px;border-radius:8px;
+  font-size:13.5px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:.2s}
+.btn-nav-cta:hover{opacity:.85;transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
+
+/* ─── HERO ─── */
+#home{position:relative;min-height:92vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:100px 40px 70px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;overflow:hidden;z-index:0}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.16}
+.orb1{width:560px;height:560px;background:#00E5FF;top:-120px;left:-120px}
+.orb2{width:450px;height:450px;background:#8B5CF6;bottom:-80px;right:-80px}
+.orb3{width:320px;height:320px;background:#FF3D6B;top:45%;left:50%;transform:translateX(-50%)}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:#0D1530;
+  border:1px solid #1E2D4A;padding:7px 18px;border-radius:100px;font-size:12.5px;
+  color:var(--acc);margin-bottom:30px;position:relative;z-index:1}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--acc);
+  animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.8)}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(38px,6vw,76px);font-weight:800;
+  line-height:1.05;margin-bottom:22px;position:relative;z-index:1}
+.h1-acc{background:var(--g2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.h1-acc2{background:var(--g3);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:clamp(15px,2vw,18px);color:var(--muted);max-width:640px;line-height:1.75;
+  margin-bottom:38px;position:relative;z-index:1}
+.hero-cta{display:flex;gap:14px;justify-content:center;position:relative;z-index:1;flex-wrap:wrap}
+.btn-cta{background:var(--g2);border:none;color:#000;padding:15px 36px;border-radius:12px;
+  font-size:15.5px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:.2s;letter-spacing:.3px}
+.btn-cta:hover{transform:translateY(-3px);box-shadow:0 12px 36px #00E5FF30}
+.btn-outline-cta{background:transparent;border:1.5px solid #1E2D4A;color:var(--text);
+  padding:14px 32px;border-radius:12px;font-size:15.5px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:.2s}
+.btn-outline-cta:hover{border-color:var(--acc2);color:var(--acc2)}
+.hero-stats{display:flex;gap:48px;justify-content:center;margin-top:60px;
+  position:relative;z-index:1;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-n{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;
+  background:var(--g2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-l{font-size:12.5px;color:var(--muted);margin-top:3px}
+
+/* ─── SECTION BASE ─── */
+section{padding:88px 48px}
+.section-tag{display:inline-block;font-size:12px;font-weight:600;color:var(--acc);
+  letter-spacing:2.5px;text-transform:uppercase;margin-bottom:12px}
+h2{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,46px);font-weight:800;
+  line-height:1.12;margin-bottom:14px}
+.section-sub{font-size:16px;color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:52px}
+
+/* ─── FEATURES ─── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:30px;
+  transition:.35s;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;inset:0;background:var(--g1);opacity:0;transition:.35s}
+.feat-card:hover{border-color:rgba(0,229,255,.25);transform:translateY(-5px)}
+.feat-card:hover::before{opacity:1}
+.feat-icon{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;
+  justify-content:center;font-size:21px;margin-bottom:18px;position:relative}
+.feat-icon.blue{background:#00E5FF14;border:1px solid #00E5FF30}
+.feat-icon.purple{background:#8B5CF614;border:1px solid #8B5CF630}
+.feat-icon.pink{background:#FF3D6B14;border:1px solid #FF3D6B30}
+.feat-icon.green{background:#10B98114;border:1px solid #10B98130}
+.feat-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:9px;position:relative}
+.feat-desc{font-size:13.5px;color:var(--muted);line-height:1.65;position:relative}
+
+/* ─── WORKFLOW ─── */
+#workflow .inner{background:#080D1C;border-radius:26px;padding:60px}
+.wf-steps{display:flex;gap:0;flex-wrap:wrap;margin-top:44px;position:relative}
+.wf-steps::before{content:'';position:absolute;top:24px;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,#00E5FF66,#8B5CF666,transparent);z-index:0}
+.wf-step{flex:1;min-width:150px;text-align:center;position:relative;z-index:1;padding:0 14px}
+.step-num{width:50px;height:50px;border-radius:50%;background:var(--g2);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;
+  color:#000;margin:0 auto 16px;position:relative}
+.step-label{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:7px}
+.step-desc{font-size:12.5px;color:var(--muted);line-height:1.6}
+
+/* ─── PRICING ─── */
+#pricing{text-align:center}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));
+  gap:22px;max-width:960px;margin:0 auto;text-align:left}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:22px;
+  padding:30px;position:relative;transition:.3s}
+.price-card.featured{border:2px solid var(--acc);background:#0D1A2E}
+.price-card:hover{transform:translateY(-4px)}
+.price-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--g2);color:#000;font-size:11px;font-weight:700;padding:4px 16px;
+  border-radius:100px;white-space:nowrap;letter-spacing:.6px}
+.price-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted);
+  margin-bottom:10px;text-transform:uppercase;letter-spacing:1.5px}
+.price-val{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;line-height:1;margin-bottom:4px}
+.price-val.gradient{background:var(--g2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.price-val.gradient2{background:var(--g3);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.price-val sup{font-size:18px;vertical-align:super;-webkit-text-fill-color:var(--muted);font-weight:400}
+.price-period{font-size:12.5px;color:var(--muted);margin-bottom:22px}
+.price-features{list-style:none;margin-bottom:26px}
+.price-features li{font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:9px;color:var(--muted)}
+.price-features li:last-child{border:none}
+.price-features li.ok{color:var(--text)}
+.chk{color:var(--acc);font-size:14px;font-weight:700}
+.chk-x{color:#3D4F6E;font-size:14px}
+.price-btn{width:100%;padding:13px;border-radius:11px;font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:600;cursor:pointer;transition:.2s;border:none;letter-spacing:.3px}
+.price-btn.free{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.price-btn.free:hover{border-color:var(--acc);color:var(--acc)}
+.price-btn.starter{background:#1A2840;color:var(--acc);border:1px solid #00E5FF30}
+.price-btn.starter:hover{background:var(--acc);color:#000}
+.price-btn.pro{background:var(--g2);color:#000}
+.price-btn.pro:hover{opacity:.85;transform:translateY(-1px)}
+.price-btn.ultra{background:var(--g3);color:#fff}
+.price-btn.ultra:hover{opacity:.85;transform:translateY(-1px)}
+
+/* ─── AUTH ─── */
+#account .auth-wrap{display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap}
+.auth-info{flex:1;min-width:280px}
+.auth-card{flex:1;min-width:300px;background:var(--card);border:1px solid var(--border);
+  border-radius:22px;padding:34px}
+.auth-tabs{display:flex;gap:0;background:#0D1530;border-radius:11px;padding:4px;margin-bottom:26px}
+.auth-tab{flex:1;padding:9px 6px;border-radius:9px;border:none;background:transparent;
+  color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:500;
+  cursor:pointer;transition:.2s}
+.auth-tab.active{background:#1E2D4A;color:var(--text)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.form-group{margin-bottom:18px}
+.form-label{font-size:11.5px;color:var(--muted);font-weight:600;margin-bottom:7px;display:block;
+  letter-spacing:.6px;text-transform:uppercase}
+.form-input{width:100%;background:#0A0F1E;border:1px solid var(--border);border-radius:11px;
+  padding:12px 15px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;
+  outline:none;transition:.2s}
+.form-input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(0,229,255,.12)}
+.form-input::placeholder{color:#3D4F6E}
+.forgot-link{font-size:12px;color:var(--acc);text-decoration:none;float:right;margin-top:-2px;
+  transition:.2s}
+.forgot-link:hover{color:#fff}
+.submit-btn{width:100%;background:var(--g2);border:none;color:#000;padding:13.5px;
+  border-radius:11px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;margin-top:8px;transition:.2s;letter-spacing:.3px}
+.submit-btn:hover{opacity:.85;transform:translateY(-1px)}
+.form-divider{text-align:center;color:var(--muted);font-size:12px;margin:18px 0;
+  position:relative;display:flex;align-items:center;gap:12px}
+.form-divider::before,.form-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.social-btns{display:flex;gap:10px}
+.social-btn{flex:1;background:#0A0F1E;border:1px solid var(--border);color:var(--muted);
+  padding:11px 8px;border-radius:10px;font-size:12.5px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:.2s;text-align:center}
+.social-btn:hover{border-color:rgba(0,229,255,.4);color:var(--text)}
+.security-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.s-badge{display:flex;align-items:center;gap:7px;background:#0D1530;border:1px solid var(--border);
+  padding:7px 14px;border-radius:9px;font-size:12px;color:var(--muted)}
+.form-note{font-size:12px;color:var(--muted);margin-top:14px;text-align:center;line-height:1.6}
+.form-note a{color:var(--acc);text-decoration:none}
+.strength-bar{height:4px;border-radius:4px;background:#1E2D4A;margin-top:6px;overflow:hidden}
+.strength-fill{height:100%;width:0;border-radius:4px;background:var(--g2);transition:.4s}
+.pwd-hint{font-size:11px;color:var(--muted);margin-top:5px}
+.success-msg{display:none;background:#0D2A1A;border:1px solid #10B98140;border-radius:10px;
+  padding:14px 16px;font-size:13.5px;color:#10B981;margin-top:14px;text-align:center}
+
+/* ─── CSKH ─── */
+#cskh .inner{background:#080D1C;border-radius:26px;padding:60px;
+  display:flex;gap:44px;flex-wrap:wrap}
+.cskh-info{flex:1;min-width:260px}
+.cskh-channels{flex:2;min-width:280px;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.channel-card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:22px;transition:.3s}
+.channel-card:hover{border-color:rgba(0,229,255,.3);transform:translateY(-3px)}
+.ch-icon{font-size:26px;margin-bottom:11px}
+.ch-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14.5px;margin-bottom:5px}
+.ch-desc{font-size:12.5px;color:var(--muted);line-height:1.6}
+.ch-badge{display:inline-block;font-size:10.5px;font-weight:600;padding:3px 10px;
+  border-radius:100px;margin-top:8px}
+.ch-badge.online{background:#10B98120;color:#10B981;border:1px solid #10B98140}
+.ch-badge.fast{background:#00E5FF15;color:var(--acc);border:1px solid #00E5FF30}
+.ch-badge.pro{background:#8B5CF615;color:#A78BFA;border:1px solid #8B5CF630}
+
+/* ─── SECURITY ─── */
+#security .sec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+.sec-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px}
+.sec-card:hover{border-color:rgba(139,92,246,.35)}
+.sec-icon{font-size:28px;margin-bottom:14px}
+.sec-title{font-family:'Syne',sans-serif;font-size:15.5px;font-weight:700;margin-bottom:9px}
+.sec-desc{font-size:13px;color:var(--muted);line-height:1.65}
+.sec-tag{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 10px;
+  border-radius:100px;margin-top:10px;background:#8B5CF615;color:#A78BFA;
+  border:1px solid #8B5CF630;letter-spacing:.5px;text-transform:uppercase}
+
+/* ─── FOOTER ─── */
+footer{border-top:1px solid var(--border);padding:44px 48px;display:flex;
+  justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px}
+.footer-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;
+  background:var(--g2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.footer-col h4{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px}
+.footer-col a{display:block;font-size:13px;color:var(--muted);text-decoration:none;
+  margin-bottom:8px;transition:.2s}
+.footer-col a:hover{color:var(--acc)}
+.footer-bottom{width:100%;border-top:1px solid var(--border);padding-top:24px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:12px;color:#3D4F6E}
+.footer-links-row{display:flex;gap:22px}
+.footer-links-row a{font-size:12px;color:#3D4F6E;text-decoration:none}
+.footer-links-row a:hover{color:var(--acc)}
+
+/* ─── TOAST ─── */
+#toast{position:fixed;bottom:28px;right:28px;background:#10B981;color:#000;padding:12px 22px;
+  border-radius:10px;font-size:13.5px;font-weight:600;transform:translateY(80px);
+  opacity:0;transition:.35s;z-index:9999;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+
+/* ─── MOBILE ─── */
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nav-links,.nav-right{display:none}
+  .nav-links.open{display:flex;flex-direction:column;position:fixed;top:66px;left:0;right:0;
+    background:#0A0F1E;border-bottom:1px solid var(--border);padding:20px;gap:0;z-index:999}
+  .nav-links.open li a{padding:12px 0;display:block;border-bottom:1px solid var(--border)}
+  .nav-links.open ~ .nav-right{display:flex;position:fixed;top:66px;left:0;right:0;
+    padding:16px 20px;background:#0A0F1E;top:auto;bottom:0;border-top:1px solid var(--border);
+    z-index:999}
+  .hamburger{display:flex}
+  section{padding:60px 20px}
+  #home{padding:80px 20px 60px}
+  .hero-stats{gap:24px}
+  #workflow .inner,#cskh .inner{padding:32px 20px}
+  footer{padding:40px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="logo">⬡ VidiCraft AI</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#features">Tính năng</a></li>
+    <li><a href="#workflow">Quy trình</a></li>
+    <li><a href="#pricing">Bảng giá</a></li>
+    <li><a href="#cskh">CSKH</a></li>
+    <li><a href="#security">Bảo mật</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-ghost" onclick="openTab('login')">Đăng nhập</button>
+    <button class="btn-nav-cta" onclick="openTab('register')">Dùng miễn phí</button>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="home">
+  <div class="hero-bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+  <div class="hero-badge"><span class="badge-dot"></span>Nền tảng AI Video #1 cho Creator Việt Nam</div>
+  <h1>
+    Tạo, Dịch &amp; Repurpose<br>
+    <span class="h1-acc">Video AI </span>
+    <span class="h1-acc2">Đỉnh Cao</span>
+  </h1>
+  <p>Dịch video nước ngoài sang tiếng Việt tự động, lồng tiếng AI chân thực, tạo sub sẵn, xóa logo gốc, tạo video từ prompt — tất cả trong một nền tảng duy nhất.</p>
+  <div class="hero-cta">
+    <button class="btn-cta" onclick="openTab('register')">Bắt đầu miễn phí →</button>
+    <button class="btn-outline-cta" onclick="alert('Demo sẽ sớm ra mắt! 🎬')">Xem demo 2 phút</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-n">50K+</div><div class="stat-l">Creator đang dùng</div></div>
+    <div class="stat"><div class="stat-n">2M+</div><div class="stat-l">Video đã tạo</div></div>
+    <div class="stat"><div class="stat-n">98%</div><div class="stat-l">Độ chính xác dịch</div></div>
+    <div class="stat"><div class="stat-n">4.9★</div><div class="stat-l">Đánh giá người dùng</div></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-tag">Tính năng</div>
+  <h2>Mọi thứ bạn cần<br>để làm nội dung AI</h2>
+  <p class="section-sub">Từ reup video nước ngoài đến tạo video con người chân thực, tất cả trên một nền tảng.</p>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon blue">🌐</div>
+      <div class="feat-title">Dịch tự động sang Tiếng Việt</div>
+      <div class="feat-desc">Upload video, AI nhận dạng ngôn ngữ và phiên dịch độ chính xác cao với GPT-4o. Hỗ trợ 30+ ngôn ngữ nguồn, không cần chỉnh tay.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon purple">🎙️</div>
+      <div class="feat-title">Lồng tiếng AI tự nhiên</div>
+      <div class="feat-desc">Voice cloning theo giọng gốc hoặc chọn từ 20+ giọng Việt Nam — Nam/Nữ miền Bắc, miền Nam, giọng podcast chuyên nghiệp. Nghe tự nhiên, không giả tạo.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon pink">📝</div>
+      <div class="feat-title">Tạo Sub tự động</div>
+      <div class="feat-desc">Subtitle song ngữ Anh-Việt, tự đồng bộ khung hình. Xuất SRT/ASS, tùy chỉnh font, màu sắc, vị trí ngay trên web — không cần phần mềm ngoài.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon green">✂️</div>
+      <div class="feat-title">Xóa logo & watermark gốc</div>
+      <div class="feat-desc">AI inpainting tự động detect và xóa logo, watermark từ video gốc. Sạch hoàn toàn, không để lại vết mờ hay artifact.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon blue">🤖</div>
+      <div class="feat-title">Tạo video từ Prompt AI</div>
+      <div class="feat-desc">Nhập prompt tiếng Việt hoặc tiếng Anh chuẩn quốc tế. AI sinh video chủ đề: công nghệ, tài chính, đời sống, quảng cáo sản phẩm — dài đến 10 phút.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon purple">👤</div>
+      <div class="feat-title">AI Presenter người thật</div>
+      <div class="feat-desc">Tạo nhân vật ảo chân thực: biểu cảm tự nhiên, lip-sync hoàn hảo, tùy biến trang phục, bối cảnh, màu da — không cần quay thật.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon pink">🎬</div>
+      <div class="feat-title">Video dài cho YouTube</div>
+      <div class="feat-desc">Render video chủ đề 15–60 phút: tự ghép cảnh, B-roll, nhạc nền, intro/outro. Template chuyên nghiệp cho nhiều thể loại kênh.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon green">⚡</div>
+      <div class="feat-title">Import & Export siêu nhanh</div>
+      <div class="feat-desc">Import từ YouTube URL, Google Drive hoặc upload trực tiếp. Xuất MP4 4K trong vài phút — nhanh hơn 3x so với render thủ công.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section id="workflow" style="padding-top:0">
+  <div class="inner">
+    <div class="section-tag">Quy trình</div>
+    <h2>Từ video gốc → nội dung Việt<br>trong 4 bước đơn giản</h2>
+    <div class="wf-steps">
+      <div class="wf-step">
+        <div class="step-num">1</div>
+        <div class="step-label">Import video</div>
+        <div class="step-desc">Dán link YouTube hoặc upload file MP4/MOV lên hệ thống</div>
+      </div>
+      <div class="wf-step">
+        <div class="step-num">2</div>
+        <div class="step-label">AI xử lý</div>
+        <div class="step-desc">Tự động nhận dạng, dịch thuật, xóa logo — không cần thao tác</div>
+      </div>
+      <div class="wf-step">
+        <div class="step-num">3</div>
+        <div class="step-label">Lồng tiếng + Sub</div>
+        <div class="step-desc">Chọn giọng đọc, review phụ đề, điều chỉnh nếu cần</div>
+      </div>
+      <div class="wf-step">
+        <div class="step-num">4</div>
+        <div class="step-label">Xuất bản</div>
+        <div class="step-desc">Download 4K hoặc đăng thẳng lên YouTube, TikTok, Facebook</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-tag">Bảng giá</div>
+  <h2>Chọn gói phù hợp<br>với nhu cầu của bạn</h2>
+  <p class="section-sub" style="margin:0 auto 52px">Tất cả gói đều có lồng tiếng AI, dịch tự động và xuất sub. Nâng cấp bất cứ lúc nào.</p>
+  <div class="pricing-grid">
+    <!-- FREE -->
+    <div class="price-card">
+      <div class="price-name">Miễn phí</div>
+      <div class="price-val">0 <sup>VND</sup></div>
+      <div class="price-period">Mãi mãi miễn phí • không cần thẻ</div>
+      <ul class="price-features">
+        <li class="ok"><span class="chk">✓</span>5 video / tháng</li>
+        <li class="ok"><span class="chk">✓</span>Dịch & sub tự động</li>
+        <li class="ok"><span class="chk">✓</span>Lồng tiếng 2 giọng</li>
+        <li class="ok"><span class="chk">✓</span>Xuất 1080p</li>
+        <li><span class="chk-x">✗</span>Xóa logo gốc</li>
+        <li><span class="chk-x">✗</span>AI Presenter</li>
+        <li><span class="chk-x">✗</span>Video dài hơn 5 phút</li>
+      </ul>
+      <button class="price-btn free" onclick="openTab('register')">Bắt đầu miễn phí</button>
+    </div>
+    <!-- STARTER -->
+    <div class="price-card">
+      <div class="price-name">Starter</div>
+      <div class="price-val">299K <sup>VND</sup></div>
+      <div class="price-period">/ tháng • hủy bất cứ lúc nào</div>
+      <ul class="price-features">
+        <li class="ok"><span class="chk">✓</span>30 video / tháng</li>
+        <li class="ok"><span class="chk">✓</span>Xóa logo & watermark</li>
+        <li class="ok"><span class="chk">✓</span>10 giọng lồng tiếng</li>
+        <li class="ok"><span class="chk">✓</span>Video dài tới 30 phút</li>
+        <li class="ok"><span class="chk">✓</span>Xuất 4K</li>
+        <li><span class="chk-x">✗</span>AI Presenter chân thực</li>
+        <li><span class="chk-x">✗</span>Clone giọng cá nhân</li>
+      </ul>
+      <button class="price-btn starter" onclick="showToast('Đang chuyển đến trang thanh toán Starter...')">Nâng lên Starter</button>
+    </div>
+    <!-- PRO -->
+    <div class="price-card featured">
+      <div class="price-badge">PHỔ BIẾN NHẤT</div>
+      <div class="price-name">Pro</div>
+      <div class="price-val gradient">699K <sup style="-webkit-text-fill-color:var(--muted)">VND</sup></div>
+      <div class="price-period">/ tháng • ưu tiên render</div>
+      <ul class="price-features">
+        <li class="ok"><span class="chk">✓</span>100 video / tháng</li>
+        <li class="ok"><span class="chk">✓</span>AI Presenter chân thực</li>
+        <li class="ok"><span class="chk">✓</span>20+ giọng lồng tiếng</li>
+        <li class="ok"><span class="chk">✓</span>Video dài tới 60 phút</li>
+        <li class="ok"><span class="chk">✓</span>Prompt Việt / Anh chuẩn</li>
+        <li class="ok"><span class="chk">✓</span>Ưu tiên hàng đợi render</li>
+        <li class="ok"><span class="chk">✓</span>Xuất không watermark</li>
+      </ul>
+      <button class="price-btn pro" onclick="showToast('Đang chuyển đến trang thanh toán Pro...')">Nâng lên Pro →</button>
+    </div>
+    <!-- ULTRA -->
+    <div class="price-card">
+      <div class="price-name">Ultra</div>
+      <div class="price-val gradient2">1.499K <sup style="-webkit-text-fill-color:var(--muted)">VND</sup></div>
+      <div class="price-period">/ tháng • không giới hạn</div>
+      <ul class="price-features">
+        <li class="ok"><span class="chk">✓</span>Video không giới hạn</li>
+        <li class="ok"><span class="chk">✓</span>Clone giọng cá nhân</li>
+        <li class="ok"><span class="chk">✓</span>AI Avatar tùy biến cao</li>
+        <li class="ok"><span class="chk">✓</span>API access đầy đủ</li>
+        <li class="ok"><span class="chk">✓</span>Render ưu tiên tuyệt đối</li>
+        <li class="ok"><span class="chk">✓</span>Hỗ trợ 1-1 riêng</li>
+        <li class="ok"><span class="chk">✓</span>Early access tính năng mới</li>
+      </ul>
+      <button class="price-btn ultra" onclick="showToast('Đang chuyển đến trang thanh toán Ultra...')">Dùng Ultra →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ACCOUNT / AUTH -->
+<section id="account">
+  <div class="auth-wrap">
+    <div class="auth-info">
+      <div class="section-tag">Tài khoản</div>
+      <h2>Đăng ký &amp; Đăng nhập<br>bảo mật tuyệt đối</h2>
+      <p style="color:var(--muted);font-size:15px;line-height:1.75;margin-bottom:26px">
+        Dữ liệu được mã hóa end-to-end. Hỗ trợ xác thực 2 lớp (2FA), đăng nhập Google/Apple và khóa sinh trắc học trên thiết bị di động.
+      </p>
+      <div class="security-badges">
+        <div class="s-badge">🔒 AES-256</div>
+        <div class="s-badge">📱 2FA bắt buộc</div>
+        <div class="s-badge">✅ GDPR</div>
+        <div class="s-badge">🛡️ SSL/TLS 1.3</div>
+        <div class="s-badge">🔑 Zero-knowledge</div>
+        <div class="s-badge">👁️ Chống brute-force</div>
+        <div class="s-badge">🚫 Chống SQL Injection</div>
+        <div class="s-badge">⏱️ Session timeout</div>
+      </div>
+    </div>
+
+    <div class="auth-card" id="authCard">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Đăng nhập</button>
+        <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Đăng ký</button>
+        <button class="auth-tab" id="tab-forgot" onclick="switchTab('forgot')">Quên mật khẩu</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div class="tab-panel active" id="panel-login">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="ban@email.com" id="login-email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mật khẩu <a href="#" class="forgot-link" onclick="switchTab('forgot');return false">Quên mật khẩu?</a></label>
+          <input class="form-input" type="password" placeholder="••••••••••" id="login-pass">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mã xác thực 2FA <span style="color:#3D4F6E;font-weight:400">(nếu đã bật)</span></label>
+          <input class="form-input" type="text" placeholder="6 chữ số từ Authenticator" maxlength="6" id="login-2fa">
+        </div>
+        <button class="submit-btn" onclick="handleLogin()">Đăng nhập →</button>
+        <div class="form-divider">hoặc đăng nhập với</div>
+        <div class="social-btns">
+          <button class="social-btn" onclick="showToast('Đăng nhập Google thành công! 🎉')">🔵 Google</button>
+          <button class="social-btn" onclick="showToast('Đăng nhập Apple thành công! 🎉')">⬛ Apple</button>
+          <button class="social-btn" onclick="showToast('Đăng nhập Facebook thành công! 🎉')">🔷 Facebook</button>
+        </div>
+        <div id="login-success" class="success-msg">✅ Đăng nhập thành công! Đang chuyển hướng...</div>
+      </div>
+
+      <!-- REGISTER -->
+      <div class="tab-panel" id="panel-register">
+        <div class="form-group">
+          <label class="form-label">Họ và tên</label>
+          <input class="form-input" type="text" placeholder="Nguyễn Văn A" id="reg-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="ban@email.com" id="reg-email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mật khẩu</label>
+          <input class="form-input" type="password" placeholder="Tối thiểu 8 ký tự" id="reg-pass" oninput="checkStrength(this.value)">
+          <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+          <div class="pwd-hint" id="pwdHint">Nhập mật khẩu để kiểm tra độ mạnh</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Xác nhận mật khẩu</label>
+          <input class="form-input" type="password" placeholder="Nhập lại mật khẩu" id="reg-pass2">
+        </div>
+        <button class="submit-btn" onclick="handleRegister()">Tạo tài khoản miễn phí →</button>
+        <div class="form-divider">hoặc đăng ký với</div>
+        <div class="social-btns">
+          <button class="social-btn" onclick="showToast('Đăng ký Google thành công! 🎉')">🔵 Google</button>
+          <button class="social-btn" onclick="showToast('Đăng ký Apple thành công! 🎉')">⬛ Apple</button>
+          <button class="social-btn" onclick="showToast('Đăng ký Facebook thành công! 🎉')">🔷 Facebook</button>
+        </div>
+        <div class="form-note">Bằng cách đăng ký, bạn đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a>.</div>
+        <div id="reg-success" class="success-msg">✅ Tài khoản đã được tạo! Kiểm tra email để xác nhận.</div>
+      </div>
+
+      <!-- FORGOT -->
+      <div class="tab-panel" id="panel-forgot">
+        <p style="font-size:14px;color:var(--muted);margin-bottom:22px;line-height:1.65">Nhập email đăng ký. Chúng tôi sẽ gửi link đặt lại mật khẩu — có hiệu lực trong 15 phút.</p>
+        <div class="form-group">
+          <label class="form-label">Email đăng ký</label>
+          <input class="form-input" type="email" placeholder="ban@email.com" id="forgot-email">
+        </div>
+        <button class="submit-btn" onclick="handleForgot()">Gửi link đặt lại mật khẩu</button>
+        <div id="forgot-success" class="success-msg">📧 Đã gửi! Kiểm tra hộp thư (kể cả Spam). Link hết hạn sau 15 phút.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CSKH -->
+<section id="cskh" style="padding-top:0">
+  <div class="inner">
+    <div class="cskh-info">
+      <div class="section-tag">CSKH</div>
+      <h2>Hỗ trợ<br>24/7 liên tục</h2>
+      <p style="color:var(--muted);font-size:14px;line-height:1.75;margin-top:14px">
+        Đội ngũ chuyên gia kỹ thuật và creator luôn sẵn sàng. Thời gian phản hồi trung bình dưới 2 phút trong giờ cao điểm.
+      </p>
+      <div style="margin-top:24px;background:#0A0F1E;border:1px solid var(--border);border-radius:14px;padding:18px">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">TRẠNG THÁI HỆ THỐNG</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#10B981">
+          <span style="width:8px;height:8px;border-radius:50%;background:#10B981;display:inline-block;animation:pulse 2s infinite"></span>
+          Tất cả hệ thống hoạt động bình thường
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">Uptime 99.97% trong 30 ngày qua</div>
+      </div>
+    </div>
+    <div class="cskh-channels">
+      <div class="channel-card">
+        <div class="ch-icon">💬</div>
+        <div class="ch-title">Live Chat</div>
+        <div class="ch-desc">Chat trực tiếp trong app, phản hồi trong vài giây</div>
+        <div class="ch-badge online">● Đang online</div>
+      </div>
+      <div class="channel-card">
+        <div class="ch-icon">📧</div>
+        <div class="ch-title">Email Support</div>
+        <div class="ch-desc">support@vidicraft.ai — giải quyết trong 4 giờ làm việc</div>
+        <div class="ch-badge fast">⚡ Phản hồi nhanh</div>
+      </div>
+      <div class="channel-card">
+        <div class="ch-icon">📖</div>
+        <div class="ch-title">Help Center</div>
+        <div class="ch-desc">200+ bài hướng dẫn, video tutorial tiếng Việt chi tiết</div>
+        <div class="ch-badge fast">🔍 Tự tra cứu</div>
+      </div>
+      <div class="channel-card">
+        <div class="ch-icon">👥</div>
+        <div class="ch-title">Cộng đồng</div>
+        <div class="ch-desc">Group Zalo & Discord riêng — 50K+ creator chia sẻ kinh nghiệm</div>
+        <div class="ch-badge online">● 2.4K thành viên online</div>
+      </div>
+      <div class="channel-card">
+        <div class="ch-icon">📞</div>
+        <div class="ch-title">Hotline</div>
+        <div class="ch-desc">1800-xxxx miễn phí — dành cho gói Pro & Ultra</div>
+        <div class="ch-badge pro">Pro+ only</div>
+      </div>
+      <div class="channel-card">
+        <div class="ch-icon">🎓</div>
+        <div class="ch-title">Onboarding 1-1</div>
+        <div class="ch-desc">Buổi setup cá nhân hóa 45 phút với chuyên gia — gói Ultra</div>
+        <div class="ch-badge pro">Ultra only</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section id="security">
+  <div class="section-tag">Bảo mật</div>
+  <h2>Bảo mật cấp doanh nghiệp<br>bảo vệ dữ liệu của bạn</h2>
+  <p class="section-sub">Chúng tôi áp dụng chuẩn bảo mật cao nhất để đảm bảo tài khoản và video của bạn luôn an toàn.</p>
+  <div class="sec-grid">
+    <div class="sec-card">
+      <div class="sec-icon">🔐</div>
+      <div class="sec-title">Mã hóa End-to-End AES-256</div>
+      <div class="sec-desc">Toàn bộ dữ liệu video và thông tin người dùng được mã hóa AES-256 khi lưu trữ và TLS 1.3 khi truyền tải. Không ai, kể cả đội ngũ VidiCraft, có thể đọc nội dung của bạn.</div>
+      <span class="sec-tag">AES-256 · TLS 1.3</span>
+    </div>
+    <div class="sec-card">
+      <div class="sec-icon">📱</div>
+      <div class="sec-title">Xác thực 2 lớp (2FA)</div>
+      <div class="sec-desc">Bắt buộc bật 2FA qua Google Authenticator, SMS hoặc email OTP. Mỗi thiết bị mới đăng nhập đều cần xác minh — chặn tuyệt đối tấn công chiếm tài khoản.</div>
+      <span class="sec-tag">TOTP · SMS OTP</span>
+    </div>
+    <div class="sec-card">
+      <div class="sec-icon">🛡️</div>
+      <div class="sec-title">Chống tấn công Brute Force</div>
+      <div class="sec-desc">Tự động khóa tài khoản sau 5 lần đăng nhập sai. Rate limiting nghiêm ngặt trên toàn bộ API. Captcha thông minh bật khi phát hiện hành vi bất thường.</div>
+      <span class="sec-tag">Rate Limiting · CAPTCHA</span>
+    </div>
+    <div class="sec-card">
+      <div class="sec-icon">🔑</div>
+      <div class="sec-title">Kiến trúc Zero-Knowledge</div>
+      <div class="sec-desc">Mật khẩu được hash bằng bcrypt (salt 12 rounds) trước khi lưu. Chúng tôi không bao giờ lưu mật khẩu gốc — kể cả khi bị hack, attacker cũng không thể giải mã.</div>
+      <span class="sec-tag">bcrypt · Zero-Knowledge</span>
+    </div>
+    <div class="sec-card">
+      <div class="sec-icon">✅</div>
+      <div class="sec-title">Tuân thủ GDPR & Luật An Ninh Mạng VN</div>
+      <div class="sec-desc">Hoàn toàn tuân thủ GDPR của EU và Luật An Ninh Mạng Việt Nam 2018. Server đặt tại Việt Nam và Singapore. Người dùng có quyền xóa dữ liệu bất cứ lúc nào.</div>
+      <span class="sec-tag">GDPR · VCSN 2018</span>
+    </div>
+    <div class="sec-card">
+      <div class="sec-icon">🚨</div>
+      <div class="sec-title">Giám sát & Cảnh báo 24/7</div>
+      <div class="sec-desc">Hệ thống SIEM giám sát bất thường theo thời gian thực. Nhận email/SMS cảnh báo ngay khi có đăng nhập từ thiết bị lạ, địa điểm mới, hoặc thay đổi mật khẩu.</div>
+      <span class="sec-tag">SIEM · Real-time Alerts</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">⬡ VidiCraft AI</div>
+    <p style="font-size:13px;color:var(--muted);margin-top:8px;max-width:260px;line-height:1.6">Nền tảng video AI hàng đầu dành riêng cho creator Việt Nam.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Sản phẩm</h4>
+    <a href="#features">Tính năng</a>
+    <a href="#pricing">Bảng giá</a>
+    <a href="#">API</a>
+    <a href="#">Changelog</a>
+  </div>
+  <div class="footer-col">
+    <h4>Hỗ trợ</h4>
+    <a href="#cskh">CSKH 24/7</a>
+    <a href="#">Help Center</a>
+    <a href="#">Cộng đồng</a>
+    <a href="#">Status</a>
+  </div>
+  <div class="footer-col">
+    <h4>Pháp lý</h4>
+    <a href="#">Điều khoản dịch vụ</a>
+    <a href="#">Chính sách bảo mật</a>
+    <a href="#">Refund Policy</a>
+    <a href="#">Cookie Policy</a>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 VidiCraft AI · Made with ❤️ for Vietnamese Creators · All rights reserved</div>
+    <div class="footer-links-row">
+      <a href="#">Facebook</a>
+      <a href="#">YouTube</a>
+      <a href="#">TikTok</a>
+      <a href="#">Zalo</a>
+    </div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+function toggleMenu(){
+  const nl=document.getElementById('navLinks');
+  nl.classList.toggle('open');
+}
+
+function openTab(tab){
+  document.getElementById('account').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>switchTab(tab),400);
+}
+
+function switchTab(tab){
+  ['login','register','forgot'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.remove('active');
+    document.getElementById('panel-'+t).classList.remove('active');
+  });
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('panel-'+tab).classList.add('active');
+}
+
+function handleLogin(){
+  const email=document.getElementById('login-email').value;
+  const pass=document.getElementById('login-pass').value;
+  if(!email||!pass){showToast('⚠️ Vui lòng nhập đầy đủ thông tin!');return;}
+  if(!email.includes('@')){showToast('⚠️ Email không hợp lệ!');return;}
+  document.getElementById('login-success').style.display='block';
+  showToast('✅ Đăng nhập thành công!');
+}
+
+function handleRegister(){
+  const name=document.getElementById('reg-name').value;
+  const email=document.getElementById('reg-email').value;
+  const pass=document.getElementById('reg-pass').value;
+  const pass2=document.getElementById('reg-pass2').value;
+  if(!name||!email||!pass||!pass2){showToast('⚠️ Vui lòng điền đầy đủ!');return;}
+  if(!email.includes('@')){showToast('⚠️ Email không hợp lệ!');return;}
+  if(pass.length<8){showToast('⚠️ Mật khẩu phải ít nhất 8 ký tự!');return;}
+  if(pass!==pass2){showToast('⚠️ Mật khẩu xác nhận không khớp!');return;}
+  document.getElementById('reg-success').style.display='block';
+  showToast('🎉 Tài khoản tạo thành công!');
+}
+
+function handleForgot(){
+  const email=document.getElementById('forgot-email').value;
+  if(!email||!email.includes('@')){showToast('⚠️ Vui lòng nhập email hợp lệ!');return;}
+  document.getElementById('forgot-success').style.display='block';
+  showToast('📧 Đã gửi email khôi phục!');
+}
+
+function checkStrength(pwd){
+  const fill=document.getElementById('strengthFill');
+  const hint=document.getElementById('pwdHint');
+  let score=0;
+  if(pwd.length>=8)score++;
+  if(pwd.length>=12)score++;
+  if(/[A-Z]/.test(pwd))score++;
+  if(/[0-9]/.test(pwd))score++;
+  if(/[^A-Za-z0-9]/.test(pwd))score++;
+  const levels=[
+    {w:'0%',c:'#E24B4A',t:'Quá yếu'},
+    {w:'25%',c:'#E24B4A',t:'Yếu'},
+    {w:'50%',c:'#EF9F27',t:'Trung bình'},
+    {w:'75%',c:'#00E5FF',t:'Mạnh'},
+    {w:'100%',c:'#10B981',t:'Rất mạnh ✓'}
+  ];
+  const l=levels[Math.min(score,4)];
+  fill.style.width=l.w;fill.style.background=l.c;hint.textContent=l.t;hint.style.color=l.c;
+}
+
+// Sticky nav active highlight
+window.addEventListener('scroll',()=>{
+  const sections=document.querySelectorAll('section[id],div[id]');
+  const links=document.querySelectorAll('.nav-links a');
+  let curr='';
+  sections.forEach(s=>{
+    if(window.scrollY>=s.offsetTop-120)curr='#'+s.id;
+  });
+  links.forEach(a=>{
+    a.style.color=a.getAttribute('href')===curr?'#fff':''
+  });
+});
+</script>
+</body>
+</html>

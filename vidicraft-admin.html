@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VidiCraft AI – Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --p:#0A0F1E;--p2:#0D1530;--acc:#00E5FF;--acc2:#FF3D6B;--acc3:#8B5CF6;
+  --g2:linear-gradient(90deg,#00E5FF,#8B5CF6);
+  --g3:linear-gradient(135deg,#FF3D6B,#8B5CF6);
+  --text:#E8EAF6;--muted:#7B88A8;--card:#111827;--border:#1E2D4A;
+  --green:#10B981;--yellow:#F59E0B;--red:#EF4444;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--p);color:var(--text);min-height:100vh}
+
+/* LOGIN */
+#loginScreen{position:fixed;inset:0;background:var(--p);display:flex;align-items:center;
+  justify-content:center;z-index:9999;flex-direction:column;gap:0}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:24px;
+  padding:44px;width:100%;max-width:420px;text-align:center}
+.login-logo{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;
+  background:var(--g2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:6px}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:32px}
+.login-label{font-size:11.5px;color:var(--muted);font-weight:600;text-align:left;
+  display:block;margin-bottom:6px;letter-spacing:.6px;text-transform:uppercase}
+.login-input{width:100%;background:#0A0F1E;border:1px solid var(--border);border-radius:10px;
+  padding:12px 15px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;
+  outline:none;transition:.2s;margin-bottom:16px}
+.login-input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(0,229,255,.1)}
+.login-input::placeholder{color:#3D4F6E}
+.login-btn{width:100%;background:var(--g2);border:none;color:#000;padding:13px;
+  border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:.2s;margin-top:4px}
+.login-btn:hover{opacity:.85}
+.login-err{color:var(--red);font-size:13px;margin-top:12px;display:none}
+.login-hint{font-size:12px;color:#3D4F6E;margin-top:16px}
+
+/* LAYOUT */
+#app{display:none;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#080D1C;
+  border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100}
+.sidebar-logo{padding:22px 24px;border-bottom:1px solid var(--border)}
+.sidebar-logo span{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;
+  background:var(--g2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sidebar-logo small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.sidebar-nav{flex:1;padding:16px 12px;overflow-y:auto}
+.nav-section{font-size:10.5px;color:#3D4F6E;font-weight:600;letter-spacing:1.5px;
+  text-transform:uppercase;padding:14px 12px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
+  cursor:pointer;font-size:13.5px;color:var(--muted);transition:.2s;margin-bottom:2px;
+  border:none;background:transparent;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.nav-item:hover{background:#1E2D4A;color:var(--text)}
+.nav-item.active{background:linear-gradient(135deg,#00E5FF15,#8B5CF615);
+  color:var(--acc);border:1px solid #00E5FF20}
+.nav-icon{font-size:16px;width:20px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--acc2);color:#fff;font-size:10px;
+  font-weight:700;padding:2px 7px;border-radius:100px}
+.sidebar-bottom{padding:16px;border-top:1px solid var(--border)}
+.admin-info{display:flex;align-items:center;gap:10px}
+.admin-avatar{width:36px;height:36px;border-radius:50%;background:var(--g2);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#000}
+.admin-name{font-size:13px;font-weight:600}
+.admin-role{font-size:11px;color:var(--acc);margin-top:1px}
+.logout-btn{margin-left:auto;background:transparent;border:none;color:var(--muted);
+  cursor:pointer;font-size:18px;transition:.2s}
+.logout-btn:hover{color:var(--red)}
+
+/* MAIN */
+.main{margin-left:240px;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;
+  padding:18px 32px;border-bottom:1px solid var(--border);background:rgba(10,15,30,.9);
+  backdrop-filter:blur(10px);position:sticky;top:0;z-index:50}
+.page-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.topbar-date{font-size:13px;color:var(--muted)}
+.notif-btn{background:#0D1530;border:1px solid var(--border);color:var(--text);
+  width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;position:relative}
+.notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;
+  border-radius:50%;background:var(--acc2);border:2px solid var(--p)}
+.content{padding:28px 32px}
+
+/* PAGES */
+.page{display:none}
+.page.active{display:block}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-bottom:28px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;
+  position:relative;overflow:hidden;transition:.3s}
+.stat-card:hover{transform:translateY(-3px)}
+.stat-card::before{content:'';position:absolute;top:0;right:0;width:80px;height:80px;
+  border-radius:50%;filter:blur(30px);opacity:.15}
+.stat-card.blue::before{background:#00E5FF}
+.stat-card.purple::before{background:#8B5CF6}
+.stat-card.pink::before{background:#FF3D6B}
+.stat-card.green::before{background:#10B981}
+.stat-icon{font-size:22px;margin-bottom:12px}
+.stat-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:4px}
+.stat-val.blue{background:var(--g2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:12.5px;color:var(--muted)}
+.stat-change{font-size:12px;margin-top:8px;display:flex;align-items:center;gap:4px}
+.up{color:var(--green)}
+.down{color:var(--red)}
+
+/* CHARTS ROW */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:28px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px}
+.chart-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:18px;
+  display:flex;justify-content:space-between;align-items:center}
+.chart-select{background:#0D1530;border:1px solid var(--border);color:var(--muted);
+  padding:5px 10px;border-radius:7px;font-size:12px;font-family:'DM Sans',sans-serif;outline:none}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:140px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.bar{width:100%;border-radius:6px 6px 0 0;background:var(--g2);opacity:.7;
+  transition:.3s;cursor:pointer;min-height:4px}
+.bar:hover{opacity:1;transform:scaleY(1.05);transform-origin:bottom}
+.bar-label{font-size:10px;color:var(--muted)}
+.donut-wrap{display:flex;flex-direction:column;gap:12px;justify-content:center}
+.donut-item{display:flex;align-items:center;gap:10px}
+.donut-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.donut-name{font-size:13px;flex:1}
+.donut-val{font-size:13px;font-weight:600}
+.donut-bar-bg{height:4px;background:#1E2D4A;border-radius:4px;flex:1}
+.donut-bar-fill{height:100%;border-radius:4px;transition:.8s}
+
+/* TABLE */
+.table-card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:22px;margin-bottom:20px}
+.table-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.table-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700}
+.table-actions{display:flex;gap:10px;align-items:center}
+.search-input{background:#0A0F1E;border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:9px;font-size:13px;font-family:'DM Sans',sans-serif;
+  outline:none;width:200px;transition:.2s}
+.search-input:focus{border-color:var(--acc)}
+.search-input::placeholder{color:#3D4F6E}
+.filter-btn{background:#0D1530;border:1px solid var(--border);color:var(--muted);
+  padding:8px 14px;border-radius:9px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:.2s}
+.filter-btn:hover{color:var(--text);border-color:var(--acc)}
+.export-btn{background:var(--g2);border:none;color:#000;padding:8px 16px;
+  border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+table{width:100%;border-collapse:collapse}
+th{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;
+  letter-spacing:.8px;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:12px;border-bottom:1px solid #0D1530;font-size:13.5px;transition:.2s}
+tr:hover td{background:#0D1530}
+tr:last-child td{border:none}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:100px;font-size:11.5px;font-weight:600}
+.badge.active{background:#10B98120;color:#10B981;border:1px solid #10B98140}
+.badge.pending{background:#F59E0B20;color:#F59E0B;border:1px solid #F59E0B40}
+.badge.cancelled{background:#EF444420;color:#EF4444;border:1px solid #EF444440}
+.badge.pro{background:#00E5FF15;color:var(--acc);border:1px solid #00E5FF30}
+.badge.ultra{background:#8B5CF615;color:#A78BFA;border:1px solid #8B5CF630}
+.badge.free{background:#1E2D4A;color:var(--muted);border:1px solid var(--border)}
+.badge.starter{background:#10B98115;color:#6EE7B7;border:1px solid #10B98130}
+.action-btn{background:transparent;border:1px solid var(--border);color:var(--muted);
+  padding:5px 10px;border-radius:7px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:.2s;margin-right:4px}
+.action-btn:hover{border-color:var(--acc);color:var(--acc)}
+.action-btn.del:hover{border-color:var(--red);color:var(--red)}
+.avatar-sm{width:30px;height:30px;border-radius:50%;background:var(--g2);
+  display:inline-flex;align-items:center;justify-content:center;font-size:12px;
+  font-weight:700;color:#000;margin-right:8px;vertical-align:middle}
+
+/* PAGINATION */
+.pagination{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.page-info{font-size:13px;color:var(--muted)}
+.page-btns{display:flex;gap:6px}
+.page-btn{background:#0D1530;border:1px solid var(--border);color:var(--muted);
+  width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:13px;
+  display:flex;align-items:center;justify-content:center;transition:.2s}
+.page-btn:hover,.page-btn.active{background:var(--acc);color:#000;border-color:var(--acc)}
+
+/* REVENUE CARDS */
+.revenue-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.rev-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.rev-label{font-size:12px;color:var(--muted);margin-bottom:6px}
+.rev-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
+.rev-period{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* SETTINGS */
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.settings-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px}
+.settings-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:18px;
+  padding-bottom:12px;border-bottom:1px solid var(--border)}
+.setting-row{display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid #0D1530}
+.setting-row:last-child{border:none}
+.setting-label{font-size:13.5px}
+.setting-desc{font-size:12px;color:var(--muted);margin-top:2px}
+.toggle{width:40px;height:22px;border-radius:100px;background:#1E2D4A;cursor:pointer;
+  position:relative;transition:.3s;border:none;flex-shrink:0}
+.toggle.on{background:var(--acc)}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;
+  border-radius:50%;background:#fff;transition:.3s}
+.toggle.on::after{left:21px}
+.save-btn{background:var(--g2);border:none;color:#000;padding:10px 22px;border-radius:9px;
+  font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;
+  margin-top:16px;transition:.2s}
+.save-btn:hover{opacity:.85}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:#10B981;color:#000;
+  padding:12px 20px;border-radius:10px;font-size:13.5px;font-weight:600;
+  transform:translateY(60px);opacity:0;transition:.3s;z-index:99999;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
+  z-index:1000;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:32px;width:100%;max-width:480px;position:relative}
+.modal-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:20px}
+.modal-close{position:absolute;top:16px;right:16px;background:transparent;border:none;
+  color:var(--muted);font-size:20px;cursor:pointer;transition:.2s}
+.modal-close:hover{color:var(--text)}
+.form-group{margin-bottom:16px}
+.form-label{font-size:11.5px;color:var(--muted);font-weight:600;display:block;
+  margin-bottom:6px;letter-spacing:.6px;text-transform:uppercase}
+.form-input{width:100%;background:#0A0F1E;border:1px solid var(--border);border-radius:10px;
+  padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;
+  outline:none;transition:.2s}
+.form-input:focus{border-color:var(--acc)}
+.form-select{width:100%;background:#0A0F1E;border:1px solid var(--border);border-radius:10px;
+  padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none}
+.modal-btns{display:flex;gap:10px;margin-top:20px}
+.modal-btn-cancel{flex:1;background:transparent;border:1px solid var(--border);color:var(--muted);
+  padding:11px;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px}
+.modal-btn-ok{flex:1;background:var(--g2);border:none;color:#000;padding:11px;
+  border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">⬡ VidiCraft AI</div>
+    <div class="login-sub">Trang quản trị — Chỉ dành cho Admin</div>
+    <label class="login-label">Tên đăng nhập Admin</label>
+    <input class="login-input" type="text" id="adminUser" placeholder="admin" autocomplete="off">
+    <label class="login-label">Mật khẩu</label>
+    <input class="login-input" type="password" id="adminPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Đăng nhập →</button>
+    <div class="login-err" id="loginErr">❌ Sai tên đăng nhập hoặc mật khẩu!</div>
+    <div class="login-hint">Tài khoản mặc định: <b>admin</b> / <b>vidicraft2025</b></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <span>⬡ VidiCraft AI</span>
+      <small>Admin Dashboard</small>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Tổng quan</div>
+      <button class="nav-item active" onclick="showPage('dashboard',this)">
+        <span class="nav-icon">📊</span> Dashboard
+      </button>
+      <div class="nav-section">Quản lý</div>
+      <button class="nav-item" onclick="showPage('users',this)">
+        <span class="nav-icon">👥</span> Người dùng
+        <span class="nav-badge">12</span>
+      </button>
+      <button class="nav-item" onclick="showPage('orders',this)">
+        <span class="nav-icon">📦</span> Đơn hàng
+        <span class="nav-badge">5</span>
+      </button>
+      <button class="nav-item" onclick="showPage('revenue',this)">
+        <span class="nav-icon">💰</span> Doanh thu
+      </button>
+      <div class="nav-section">Hệ thống</div>
+      <button class="nav-item" onclick="showPage('settings',this)">
+        <span class="nav-icon">⚙️</span> Cài đặt
+      </button>
+      <button class="nav-item" onclick="showPage('security',this)">
+        <span class="nav-icon">🛡️</span> Bảo mật
+      </button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="admin-info">
+        <div class="admin-avatar">A</div>
+        <div>
+          <div class="admin-name">Admin</div>
+          <div class="admin-role">Super Admin</div>
+        </div>
+        <button class="logout-btn" onclick="doLogout()" title="Đăng xuất">⏻</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="pageTitle">Dashboard</div>
+      <div class="topbar-right">
+        <div class="topbar-date" id="topbarDate"></div>
+        <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card blue">
+            <div class="stat-icon">👥</div>
+            <div class="stat-val blue">1,284</div>
+            <div class="stat-label">Tổng người dùng</div>
+            <div class="stat-change up">▲ +12.5% so tháng trước</div>
+          </div>
+          <div class="stat-card purple">
+            <div class="stat-icon">💰</div>
+            <div class="stat-val" style="color:#A78BFA">48.6M</div>
+            <div class="stat-label">Doanh thu tháng này (VND)</div>
+            <div class="stat-change up">▲ +8.3% so tháng trước</div>
+          </div>
+          <div class="stat-card pink">
+            <div class="stat-icon">🎬</div>
+            <div class="stat-val" style="color:#FB7185">23,410</div>
+            <div class="stat-label">Video đã tạo</div>
+            <div class="stat-change up">▲ +21% so tháng trước</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon">📦</div>
+            <div class="stat-val" style="color:#10B981">342</div>
+            <div class="stat-label">Đơn hàng tháng này</div>
+            <div class="stat-change down">▼ -2.1% so tháng trước</div>
+          </div>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-title">
+              Doanh thu 7 ngày gần nhất
+              <select class="chart-select"><option>7 ngày</option><option>30 ngày</option><option>3 tháng</option></select>
+            </div>
+            <div class="bar-chart" id="barChart"></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Phân bổ gói đăng ký</div>
+            <div class="donut-wrap">
+              <div class="donut-item">
+                <div class="donut-dot" style="background:#6B7280"></div>
+                <div class="donut-name">Miễn phí</div>
+                <div class="donut-bar-bg"><div class="donut-bar-fill" style="width:55%;background:#6B7280"></div></div>
+                <div class="donut-val">55%</div>
+              </div>
+              <div class="donut-item">
+                <div class="donut-dot" style="background:#10B981"></div>
+                <div class="donut-name">Starter</div>
+                <div class="donut-bar-bg"><div class="donut-bar-fill" style="width:20%;background:#10B981"></div></div>
+                <div class="donut-val">20%</div>
+              </div>
+              <div class="donut-item">
+                <div class="donut-dot" style="background:#00E5FF"></div>
+                <div class="donut-name">Pro</div>
+                <div class="donut-bar-bg"><div class="donut-bar-fill" style="width:18%;background:#00E5FF"></div></div>
+                <div class="donut-val">18%</div>
+              </div>
+              <div class="donut-item">
+                <div class="donut-dot" style="background:#8B5CF6"></div>
+                <div class="donut-name">Ultra</div>
+                <div class="donut-bar-bg"><div class="donut-bar-fill" style="width:7%;background:#8B5CF6"></div></div>
+                <div class="donut-val">7%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Người dùng mới nhất</div>
+            <button class="export-btn" onclick="showToast('Đã xuất file Excel!')">⬇ Xuất Excel</button>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Người dùng</th><th>Gói</th><th>Ngày đăng ký</th><th>Trạng thái</th><th>Thao tác</th>
+            </tr></thead>
+            <tbody>
+              <tr><td><span class="avatar-sm">N</span>Nguyễn Văn An</td><td><span class="badge pro">Pro</span></td><td>25/04/2025</td><td><span class="badge active">● Active</span></td><td><button class="action-btn">Xem</button><button class="action-btn del">Xóa</button></td></tr>
+              <tr><td><span class="avatar-sm">T</span>Trần Thị Bình</td><td><span class="badge ultra">Ultra</span></td><td>24/04/2025</td><td><span class="badge active">● Active</span></td><td><button class="action-btn">Xem</button><button class="action-btn del">Xóa</button></td></tr>
+              <tr><td><span class="avatar-sm">L</span>Lê Minh Cường</td><td><span class="badge starter">Starter</span></td><td>23/04/2025</td><td><span class="badge pending">⏳ Pending</span></td><td><button class="action-btn">Xem</button><button class="action-btn del">Xóa</button></td></tr>
+              <tr><td><span class="avatar-sm">P</span>Phạm Thu Dung</td><td><span class="badge free">Free</span></td><td>22/04/2025</td><td><span class="badge active">● Active</span></td><td><button class="action-btn">Xem</button><button class="action-btn del">Xóa</button></td></tr>
+              <tr><td><span class="avatar-sm">H</span>Hoàng Văn Em</td><td><span class="badge pro">Pro</span></td><td>21/04/2025</td><td><span class="badge cancelled">✕ Cancelled</span></td><td><button class="action-btn">Xem</button><button class="action-btn del">Xóa</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- USERS -->
+      <div class="page" id="page-users">
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Quản lý người dùng (1,284)</div>
+            <div class="table-actions">
+              <input class="search-input" placeholder="🔍 Tìm kiếm..." oninput="filterTable(this,'userTable')">
+              <button class="filter-btn">Lọc</button>
+              <button class="export-btn" onclick="document.getElementById('addUserModal').classList.add('open')">+ Thêm</button>
+            </div>
+          </div>
+          <table id="userTable">
+            <thead><tr>
+              <th>ID</th><th>Họ tên</th><th>Email</th><th>Gói</th><th>Video đã tạo</th><th>Ngày đăng ký</th><th>Trạng thái</th><th>Thao tác</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>#001</td><td><span class="avatar-sm">N</span>Nguyễn Văn An</td><td>an@gmail.com</td><td><span class="badge pro">Pro</span></td><td>142</td><td>25/04/2025</td><td><span class="badge active">● Active</span></td><td><button class="action-btn">Sửa</button><button class="action-btn del" onclick="showToast('Đã xóa người dùng!')">Xóa</button></td></tr>
+              <tr><td>#002</td><td><span class="avatar-sm">T</span>Trần Thị Bình</td><td>binh@gmail.com</td><td><span class="badge ultra">Ultra</span></td><td>389</td><td>24/04/2025</td><td><span class="badge active">● Active</span></td><td><button class="action-btn">Sửa</button><button class="action-btn del" onclick="showToast('Đã xóa người dùng!')">Xóa</button></td></tr>
+              <tr><td>#003</td><td><span class="avatar-sm">L</span>Lê Minh Cường</td><td>cuong@gmail.com</td><td><span class="badge starter">Starter</span></td><td>54</td><td>23/04/2025</td><td><span class="badge pending">⏳ Pending</span></td><td><button class="action-btn">Sửa</button><button class="action-btn del" onclick="showToast('Đã xóa người dùng!')">Xóa</button></td></tr>
+              <tr><td>#004</td><td><span class="avatar-sm">P</span>Phạm Thu Dung</td><td>dung@gmail.com</td><td><span class="badge free">Free</span></td><td>8</td><td>22/04/2025</td><td><span class="badge active">● Active</span></td><td><button class="action-btn">Sửa</button><button class="action-btn del" onclick="showToast('Đã xóa người dùng!')">Xóa</button></td></tr>
+              <tr><td>#005</td><td><span class="avatar-sm">H</span>Hoàng Văn Em</td><td>em@gmail.com</td><td><span class="badge pro">Pro</span></td><td>201</td><td>21/04/2025</td><td><span class="badge cancelled">✕ Cancelled</span></td><td><button class="action-btn">Sửa</button><button class="action-btn del" onclick="showToast('Đã xóa người dùng!')">Xóa</button></td></tr>
+              <tr><td>#006</td><td><span class="avatar-sm">V</span>Võ Thị Phương</td><td>phuong@gmail.com</td><td><span class="badge ultra">Ultra</span></td><td>512</td><td>20/04/2025</td><td><span class="badge active">● Active</span></td><td><button class="action-btn">Sửa</button><button class="action-btn del" onclick="showToast('Đã xóa người dùng!')">Xóa</button></td></tr>
+            </tbody>
+          </table>
+          <div class="pagination">
+            <div class="page-info">Hiển thị 1–6 / 1,284 người dùng</div>
+            <div class="page-btns">
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <button class="page-btn">→</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="page" id="page-orders">
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Quản lý đơn hàng (342)</div>
+            <div class="table-actions">
+              <input class="search-input" placeholder="🔍 Tìm mã đơn...">
+              <button class="filter-btn">Lọc</button>
+              <button class="export-btn" onclick="showToast('Đã xuất danh sách đơn hàng!')">⬇ Xuất</button>
+            </div>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Mã đơn</th><th>Khách hàng</th><th>Gói</th><th>Số tiền</th><th>Ngày mua</th><th>Thanh toán</th><th>Trạng thái</th><th>Thao tác</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>#ORD-0342</td><td>Nguyễn Văn An</td><td><span class="badge pro">Pro</span></td><td>699,000đ</td><td>25/04/2025</td><td>MoMo</td><td><span class="badge active">● Thành công</span></td><td><button class="action-btn">Chi tiết</button></td></tr>
+              <tr><td>#ORD-0341</td><td>Trần Thị Bình</td><td><span class="badge ultra">Ultra</span></td><td>1,499,000đ</td><td>24/04/2025</td><td>VNPAY</td><td><span class="badge active">● Thành công</span></td><td><button class="action-btn">Chi tiết</button></td></tr>
+              <tr><td>#ORD-0340</td><td>Lê Minh Cường</td><td><span class="badge starter">Starter</span></td><td>299,000đ</td><td>23/04/2025</td><td>Chuyển khoản</td><td><span class="badge pending">⏳ Đang xử lý</span></td><td><button class="action-btn">Chi tiết</button></td></tr>
+              <tr><td>#ORD-0339</td><td>Phạm Thu Dung</td><td><span class="badge pro">Pro</span></td><td>699,000đ</td><td>22/04/2025</td><td>Thẻ tín dụng</td><td><span class="badge cancelled">✕ Hoàn tiền</span></td><td><button class="action-btn">Chi tiết</button></td></tr>
+              <tr><td>#ORD-0338</td><td>Hoàng Văn Em</td><td><span class="badge ultra">Ultra</span></td><td>1,499,000đ</td><td>21/04/2025</td><td>MoMo</td><td><span class="badge active">● Thành công</span></td><td><button class="action-btn">Chi tiết</button></td></tr>
+            </tbody>
+          </table>
+          <div class="pagination">
+            <div class="page-info">Hiển thị 1–5 / 342 đơn hàng</div>
+            <div class="page-btns">
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">→</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REVENUE -->
+      <div class="page" id="page-revenue">
+        <div class="revenue-grid">
+          <div class="rev-card">
+            <div class="rev-label">Hôm nay</div>
+            <div class="rev-val" style="color:#00E5FF">2,397,000đ</div>
+            <div class="rev-period">▲ +15% so hôm qua</div>
+          </div>
+          <div class="rev-card">
+            <div class="rev-label">Tuần này</div>
+            <div class="rev-val" style="color:#A78BFA">14,820,000đ</div>
+            <div class="rev-period">▲ +8% so tuần trước</div>
+          </div>
+          <div class="rev-card">
+            <div class="rev-label">Tháng này</div>
+            <div class="rev-val" style="color:#10B981">48,650,000đ</div>
+            <div class="rev-period">▲ +8.3% so tháng trước</div>
+          </div>
+          <div class="rev-card">
+            <div class="rev-label">Năm 2025</div>
+            <div class="rev-val" style="color:#F59E0B">186,400,000đ</div>
+            <div class="rev-period">▲ +32% so năm ngoái</div>
+          </div>
+        </div>
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">Doanh thu theo gói</div>
+          </div>
+          <table>
+            <thead><tr><th>Gói</th><th>Số người dùng</th><th>Doanh thu tháng</th><th>Tỉ lệ</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge starter">Starter</span></td><td>257</td><td>76,843,000đ</td><td><div style="background:#1E2D4A;border-radius:4px;height:6px"><div style="width:30%;background:#10B981;height:100%;border-radius:4px"></div></div></td></tr>
+              <tr><td><span class="badge pro">Pro</span></td><td>231</td><td>161,469,000đ</td><td><div style="background:#1E2D4A;border-radius:4px;height:6px"><div style="width:63%;background:#00E5FF;height:100%;border-radius:4px"></div></div></td></tr>
+              <tr><td><span class="badge ultra">Ultra</span></td><td>90</td><td>134,910,000đ</td><td><div style="background:#1E2D4A;border-radius:4px;height:6px"><div style="width:52%;background:#8B5CF6;height:100%;border-radius:4px"></div></div></td></tr>
+              <tr><td><span class="badge free">Free</span></td><td>706</td><td>0đ</td><td><div style="background:#1E2D4A;border-radius:4px;height:6px"><div style="width:0%;background:#6B7280;height:100%;border-radius:4px"></div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="page" id="page-settings">
+        <div class="settings-grid">
+          <div class="settings-card">
+            <div class="settings-title">⚙️ Cài đặt chung</div>
+            <div class="form-group">
+              <label class="form-label">Tên website</label>
+              <input class="form-input" value="VidiCraft AI">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email liên hệ</label>
+              <input class="form-input" value="support@vidicraft.ai">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Số điện thoại hỗ trợ</label>
+              <input class="form-input" value="0909 xxx xxx">
+            </div>
+            <button class="save-btn" onclick="showToast('✅ Đã lưu cài đặt!')">Lưu thay đổi</button>
+          </div>
+          <div class="settings-card">
+            <div class="settings-title">🔔 Thông báo</div>
+            <div class="setting-row">
+              <div><div class="setting-label">Thông báo đơn hàng mới</div><div class="setting-desc">Nhận email khi có đơn hàng</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-label">Thông báo người dùng mới</div><div class="setting-desc">Nhận email khi có đăng ký</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-label">Cảnh báo bảo mật</div><div class="setting-desc">Thông báo đăng nhập lạ</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-label">Báo cáo hàng tuần</div><div class="setting-desc">Tổng kết doanh thu, người dùng</div></div>
+              <button class="toggle" onclick="this.classList.toggle('on')"></button>
+            </div>
+          </div>
+          <div class="settings-card">
+            <div class="settings-title">💰 Giá gói dịch vụ</div>
+            <div class="form-group">
+              <label class="form-label">Gói Starter (VND/tháng)</label>
+              <input class="form-input" value="299000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Gói Pro (VND/tháng)</label>
+              <input class="form-input" value="699000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Gói Ultra (VND/tháng)</label>
+              <input class="form-input" value="1499000">
+            </div>
+            <button class="save-btn" onclick="showToast('✅ Đã cập nhật bảng giá!')">Cập nhật giá</button>
+          </div>
+          <div class="settings-card">
+            <div class="settings-title">🔑 Đổi mật khẩu Admin</div>
+            <div class="form-group">
+              <label class="form-label">Mật khẩu hiện tại</label>
+              <input class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mật khẩu mới</label>
+              <input class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Xác nhận mật khẩu mới</label>
+              <input class="form-input" type="password" placeholder="••••••••">
+            </div>
+            <button class="save-btn" onclick="showToast('✅ Đã đổi mật khẩu thành công!')">Đổi mật khẩu</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECURITY -->
+      <div class="page" id="page-security">
+        <div class="settings-grid">
+          <div class="settings-card">
+            <div class="settings-title">🛡️ Bảo mật đăng nhập</div>
+            <div class="setting-row">
+              <div><div class="setting-label">Xác thực 2 lớp (2FA)</div><div class="setting-desc">Bắt buộc nhập mã OTP khi đăng nhập</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-label">Giới hạn IP đăng nhập</div><div class="setting-desc">Chỉ cho phép IP đã whitelist</div></div>
+              <button class="toggle" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-label">Session timeout</div><div class="setting-desc">Tự đăng xuất sau 30 phút không hoạt động</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-label">Chống brute force</div><div class="setting-desc">Khóa sau 5 lần sai mật khẩu</div></div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+          </div>
+          <div class="settings-card">
+            <div class="settings-title">📋 Lịch sử đăng nhập</div>
+            <table>
+              <thead><tr><th>Thời gian</th><th>IP</th><th>Thiết bị</th><th>Trạng thái</th></tr></thead>
+              <tbody>
+                <tr><td>25/04 19:58</td><td>113.161.xx.xx</td><td>Windows Chrome</td><td><span class="badge active">✓ OK</span></td></tr>
+                <tr><td>24/04 08:12</td><td>113.161.xx.xx</td><td>Windows Chrome</td><td><span class="badge active">✓ OK</span></td></tr>
+                <tr><td>23/04 21:44</td><td>14.232.xx.xx</td><td>Android Mobile</td><td><span class="badge active">✓ OK</span></td></tr>
+                <tr><td>22/04 11:03</td><td>103.48.xx.xx</td><td>Windows Edge</td><td><span class="badge cancelled">✕ Thất bại</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- content -->
+  </div><!-- main -->
+</div><!-- app -->
+
+<!-- ADD USER MODAL -->
+<div class="modal-bg" id="addUserModal">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('addUserModal').classList.remove('open')">✕</button>
+    <div class="modal-title">➕ Thêm người dùng mới</div>
+    <div class="form-group"><label class="form-label">Họ tên</label><input class="form-input" placeholder="Nguyễn Văn A"></div>
+    <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="email@gmail.com"></div>
+    <div class="form-group"><label class="form-label">Gói đăng ký</label>
+      <select class="form-select form-input"><option>Free</option><option>Starter</option><option>Pro</option><option>Ultra</option></select>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn-cancel" onclick="document.getElementById('addUserModal').classList.remove('open')">Hủy</button>
+      <button class="modal-btn-ok" onclick="document.getElementById('addUserModal').classList.remove('open');showToast('✅ Đã thêm người dùng!')">Thêm</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ─── LOGIN ───
+function doLogin(){
+  const u=document.getElementById('adminUser').value.trim();
+  const p=document.getElementById('adminPass').value;
+  if(u==='admin'&&p==='vidicraft2025'){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    updateDate();
+    buildBarChart();
+  } else {
+    document.getElementById('loginErr').style.display='block';
+    setTimeout(()=>document.getElementById('loginErr').style.display='none',3000);
+  }
+}
+
+function doLogout(){
+  if(confirm('Bạn chắc chắn muốn đăng xuất?')){
+    document.getElementById('app').style.display='none';
+    document.getElementById('loginScreen').style.display='flex';
+    document.getElementById('adminUser').value='';
+    document.getElementById('adminPass').value='';
+  }
+}
+
+// ─── NAVIGATION ───
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+  const titles={dashboard:'Dashboard',users:'Quản lý người dùng',orders:'Quản lý đơn hàng',
+    revenue:'Doanh thu',settings:'Cài đặt',security:'Bảo mật'};
+  document.getElementById('pageTitle').textContent=titles[id]||id;
+}
+
+// ─── DATE ───
+function updateDate(){
+  const d=new Date();
+  document.getElementById('topbarDate').textContent=
+    d.toLocaleDateString('vi-VN',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'});
+}
+
+// ─── BAR CHART ───
+function buildBarChart(){
+  const data=[65,80,45,90,70,88,95];
+  const days=['T2','T3','T4','T5','T6','T7','CN'];
+  const max=Math.max(...data);
+  const c=document.getElementById('barChart');
+  c.innerHTML='';
+  data.forEach((v,i)=>{
+    const wrap=document.createElement('div');wrap.className='bar-wrap';
+    const bar=document.createElement('div');bar.className='bar';
+    bar.style.height=((v/max)*120)+'px';
+    bar.title=`${days[i]}: ${v*500000}đ`;
+    const lbl=document.createElement('div');lbl.className='bar-label';lbl.textContent=days[i];
+    wrap.appendChild(bar);wrap.appendChild(lbl);c.appendChild(wrap);
+  });
+}
+
+// ─── SEARCH ───
+function filterTable(input,tableId){
+  const q=input.value.toLowerCase();
+  document.querySelectorAll(`#${tableId} tbody tr`).forEach(row=>{
+    row.style.display=row.textContent.toLowerCase().includes(q)?'':'none';
+  });
+}
+
+// ─── TOAST ───
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
