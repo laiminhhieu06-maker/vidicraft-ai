@@ -1,1 +1,0 @@
-# vidicraft-ai
